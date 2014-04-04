@@ -5,17 +5,17 @@
 
 package com.spontecorp.futboldata.jpacontroller;
 
-import com.spontecorp.futboldata.entity.Asociacion;
+import com.spontecorp.futboldata.entity.Email;
 import java.io.Serializable;
 
 /**
  *
  * @author sponte03
  */
-public class AsociacionFacede extends AbstractFacade<Asociacion> implements Serializable{
+public class EmailFacade extends AbstractFacade<Email> implements Serializable{
 
-    public AsociacionFacede(Class<Asociacion> entityClass) {
+    public EmailFacade(Class<Email> entityClass) {
         super(entityClass);
     }
-
+    
 }

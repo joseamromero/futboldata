@@ -6,7 +6,6 @@
 package com.spontecorp.futboldata.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,48 +16,44 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author sponte03
  */
 @Entity
-@Table(name = "asociacion")
+@Table(name = "telefono")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Asociacion.findAll", query = "SELECT a FROM Asociacion a"),
-    @NamedQuery(name = "Asociacion.findById", query = "SELECT a FROM Asociacion a WHERE a.id = :id"),
-    @NamedQuery(name = "Asociacion.findByNombre", query = "SELECT a FROM Asociacion a WHERE a.nombre = :nombre"),
-    @NamedQuery(name = "Asociacion.findByStatus", query = "SELECT a FROM Asociacion a WHERE a.status = :status")})
-public class Asociacion implements Serializable {
+    @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
+    @NamedQuery(name = "Telefono.findById", query = "SELECT t FROM Telefono t WHERE t.id = :id"),
+    @NamedQuery(name = "Telefono.findByTelefono", query = "SELECT t FROM Telefono t WHERE t.telefono = :telefono")})
+public class Telefono implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "nombre")
-    private String nombre;
-    @Column(name = "status")
-    private Integer status;
-    @OneToMany(mappedBy = "asociacionId")
-    private Collection<Arbitro> arbitroCollection;
-    @JoinColumn(name = "red_social_id", referencedColumnName = "id")
-    @ManyToOne
-    private RedSocial redSocialId;
+    @Basic(optional = false)
+    @Column(name = "telefono")
+    private String telefono;
     @JoinColumn(name = "direccion_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Direccion direccionId;
 
-    public Asociacion() {
+    public Telefono() {
     }
 
-    public Asociacion(Integer id) {
+    public Telefono(Integer id) {
         this.id = id;
+    }
+
+    public Telefono(Integer id, String telefono) {
+        this.id = id;
+        this.telefono = telefono;
     }
 
     public Integer getId() {
@@ -69,37 +64,12 @@ public class Asociacion implements Serializable {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    @XmlTransient
-    public Collection<Arbitro> getArbitroCollection() {
-        return arbitroCollection;
-    }
-
-    public void setArbitroCollection(Collection<Arbitro> arbitroCollection) {
-        this.arbitroCollection = arbitroCollection;
-    }
-
-    public RedSocial getRedSocialId() {
-        return redSocialId;
-    }
-
-    public void setRedSocialId(RedSocial redSocialId) {
-        this.redSocialId = redSocialId;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public Direccion getDireccionId() {
@@ -120,10 +90,10 @@ public class Asociacion implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Asociacion)) {
+        if (!(object instanceof Telefono)) {
             return false;
         }
-        Asociacion other = (Asociacion) object;
+        Telefono other = (Telefono) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -132,7 +102,7 @@ public class Asociacion implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "com.spontecorp.futboldata.entity.Telefono[ id=" + id + " ]";
     }
     
 }
