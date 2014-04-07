@@ -5,9 +5,13 @@
 package com.spontecorp.futboldata.viewcontroller;
 
 import com.spontecorp.futboldata.entity.Asociacion;
+import com.spontecorp.futboldata.entity.Direccion;
+import com.spontecorp.futboldata.entity.Telefono;
 import com.spontecorp.futboldata.jpacontroller.AsociacionFacade;
+import com.spontecorp.futboldata.jpacontroller.DireccionFacede;
 import com.spontecorp.futboldata.utilities.Util;
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
@@ -27,12 +31,14 @@ public class AsociacionBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Asociacion asociacion ; 
+    private List<Telefono> telefonos = null;
     private transient DataModel items = null;
     private transient DataModel itemsAsociacion = null;
 
   
     private final AsociacionFacade controllerAsociacion;
     private final transient EntityManagerFactory emf = Util.getEmf();
+    private final DireccionFacede controllerDireccion;
 
     /**
      * Creates a new instance of LocalidadBean
@@ -40,6 +46,7 @@ public class AsociacionBean implements Serializable {
     public AsociacionBean()   {
      
         controllerAsociacion = new AsociacionFacade(Asociacion.class);
+        controllerDireccion = new DireccionFacede(Direccion.class);
     }
 
     
@@ -73,12 +80,17 @@ public class AsociacionBean implements Serializable {
     public DataModel getItemsAsociacion() {
 
         if (itemsAsociacion == null) {
-            itemsAsociacion = new ListDataModel(controllerAsociacion.findAll());
+            itemsAsociacion = new ListDataModel(controllerAsociacion.findAll());     
         }
         return itemsAsociacion;
 
     }
-
+    public String getTelefonos(Direccion direccion){
+        System.out.print("Esta es la direaccion que trata de buscar "+direccion.getId().toString()+"***");
+        telefonos = controllerDireccion.findListTelefonoxDireaccion(direccion);
+        return telefonos.get(0).toString();
+        
+    }
     public DataModel getItems() {
 
         if (items == null) {

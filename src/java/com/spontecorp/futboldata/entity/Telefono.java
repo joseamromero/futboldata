@@ -102,7 +102,7 @@ public class Telefono implements Serializable {
 
     @Override
     public String toString() {
-        return "com.spontecorp.futboldata.entity.Telefono[ id=" + id + " ]";
+        return telefono;
     }
     
 }

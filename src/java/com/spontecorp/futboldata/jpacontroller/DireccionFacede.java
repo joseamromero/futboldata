@@ -23,22 +23,14 @@ import org.slf4j.LoggerFactory;
  */
 public class DireccionFacede extends AbstractFacade<Direccion> implements  Serializable{
         
-        private TelefonoFacade controllerTelefono;
+        private TelefonoFacade controllerTelefono =new TelefonoFacade (Telefono.class);
+       
          private TelefonoFacade controllerEmail;
         private static final Logger logger = LoggerFactory.getLogger(Direccion.class);
         
         public List<Telefono> findListTelefonoxDireaccion(Direccion direccion) {
-        List<Telefono> telefonos = null;
-        try {
-            EntityManager emTelefono = controllerTelefono.getEntityManager();
-            String query = "SELECT t FROM Telefono t WHERE  t.direaccionId = :direccion";
-            Query q = emTelefono.createQuery(query, Telefono.class);
-            q.setParameter("direccion", direccion);
-            telefonos = (List<Telefono>) q.getResultList();
-        } catch (Exception e) {
-            logger.debug("Error encontrando los telefonos: " + e.getLocalizedMessage(), e);
-        }
-        return telefonos;
+
+        return controllerTelefono.findListTelefonoxDireaccion(direccion);
     }
         
         
@@ -46,7 +38,7 @@ public class DireccionFacede extends AbstractFacade<Direccion> implements  Seria
         List<Email> email = null;
         try {
             EntityManager emTelefono = controllerEmail.getEntityManager();
-            String query = "SELECT e FROM Email e WHERE  e.direaccionId = :direccion";
+            String query = "SELECT e FROM Email e WHERE  e.emailId = :direccion";
             Query q = emTelefono.createQuery(query, Email.class);
             q.setParameter("direccion", direccion);
             email = (List<Email>) q.getResultList();
