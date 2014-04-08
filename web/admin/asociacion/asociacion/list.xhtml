@@ -16,8 +16,8 @@
             <p:fieldset style="width: 85%" legend="Lista de Arbitros" >
                 <p:toolbar>
                     <p:toolbarGroup align="left">
-                        <p:commandButton value="Nuevo" action="create"/>
-                        <p:commandButton value="Administración" action="/admin/adminPage"
+                        <p:commandButton value="Nuevo" action="#{asociacionBean.prepareCreate()}"/>
+                        <p:commandButton value="Administración" action="#{asociacionBean.returnAdminPage()}"
                                          immediate="true"/>
                     </p:toolbarGroup>                    
                 </p:toolbar>
@@ -25,7 +25,7 @@
                 
                 <p:dataTable id="AsociacionesTabla" var="asociacion"  value="#{asociacionBean.itemsAsociacion}"
                              rowKey="#{asociacion.id}"
-                             selection="#{asociacionBean.asociacion.nombre}" 
+                             selection="#{asociacionBean.selectedAsociacion.nombre}" 
                              selectionMode="single">                
 
                     <p:column headerText="Nombre">
