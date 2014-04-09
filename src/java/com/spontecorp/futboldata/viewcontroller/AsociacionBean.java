@@ -13,7 +13,9 @@ import com.spontecorp.futboldata.entity.Telefono;
 import com.spontecorp.futboldata.jpacontroller.AsociacionFacade;
 import com.spontecorp.futboldata.jpacontroller.CiudadFacade;
 import com.spontecorp.futboldata.jpacontroller.DireccionFacede;
+import com.spontecorp.futboldata.jpacontroller.EmailFacade;
 import com.spontecorp.futboldata.jpacontroller.PaisFacade;
+import com.spontecorp.futboldata.jpacontroller.TelefonoFacade;
 import com.spontecorp.futboldata.utilities.Util;
 
 import java.io.Serializable;
@@ -48,11 +50,14 @@ public class AsociacionBean implements Serializable {
     private List<Telefono> telefonos = null;
     private transient DataModel items = null;
     private transient DataModel itemsAsociacion = null;
+    private SelectItem[] ciudades;
 
     private final AsociacionFacade controllerAsociacion;
     private final transient EntityManagerFactory emf = Util.getEmf();
     private final DireccionFacede controllerDireccion;
-    private SelectItem[] ciudades;
+    private final TelefonoFacade controllerTelefono;
+    private final EmailFacade controllerEmail;
+
     private final CiudadFacade controllerCiudad;
     private final PaisFacade controllerPais;
 
@@ -62,7 +67,8 @@ public class AsociacionBean implements Serializable {
     public AsociacionBean() {
         controllerPais = new PaisFacade(Pais.class);
         controllerCiudad = new CiudadFacade(Ciudad.class);
-
+        controllerEmail = new EmailFacade(Email.class);
+        controllerTelefono = new TelefonoFacade(Telefono.class);
         controllerAsociacion = new AsociacionFacade(Asociacion.class);
         controllerDireccion = new DireccionFacede(Direccion.class);
     }
@@ -90,6 +96,10 @@ public class AsociacionBean implements Serializable {
     }
 
     public void ciudadAvailable() {
+        ciudades = Util.getSelectItems(controllerCiudad.findCiudadxPais(pais));
+    }
+   
+    public void ciudadAvailable(Pais pais) {
         ciudades = Util.getSelectItems(controllerCiudad.findCiudadxPais(pais));
     }
 
@@ -129,14 +139,14 @@ public class AsociacionBean implements Serializable {
 
     }
 
-    public DataModel getItems() {
-
-        if (items == null) {
-            items = new ListDataModel(controllerAsociacion.findAll());
-        }
-        return items;
+    public List<Email> getEmails(Direccion direccion) {
+        System.out.print("Esta es la direaccion que trata de buscar " + direccion.getId().toString() + "***");
+        emails = controllerDireccion.findListEmailxDireaccion(direccion);
+        return emails;
 
     }
+
+
 
     public String gotoAsociacionPage() {
         recreateModel();
@@ -162,6 +172,20 @@ public class AsociacionBean implements Serializable {
                 return null;
             } else {
 
+                controllerDireccion.create(direccion);
+                for (Email item : emails) {
+                    item.setDireccionId(direccion);
+                    controllerEmail.create(item);
+                }
+                for (Telefono item2 : telefonos) {
+                    item2.setDireccionId(direccion);
+                    controllerTelefono.create(item2);
+                }
+                direccion.setEmailCollection(emails);
+                direccion.setTelefonoCollection(telefonos);
+
+                asociacion.setDireccionId(direccion);
+
                 controllerAsociacion.create(asociacion);
                 Util.addSuccessMessage("Asociacion creada con éxito");
                 return prepareCreate();
@@ -177,6 +201,10 @@ public class AsociacionBean implements Serializable {
             asociacion = new Asociacion();
         }
         return asociacion;
+    }
+    public void setSelectedAsociacion(Asociacion asociacion){
+       this.asociacion = asociacion;
+  
     }
 
     public String prepareList() {
@@ -199,21 +227,20 @@ public class AsociacionBean implements Serializable {
     }
 
     public void cargarTelefono() {
-        System.out.println("EL telefono que agarro fue: " + telefono.getTelefono());
         telefonos.add(telefono);
         telefono = new Telefono();
 
     }
 
-    public void cargarEmail() {
-        System.out.println("EL telefono que agarro fue: " + telefono.getTelefono());
+    public void cargarEmail() {    
         emails.add(email);
         email = new Email();
 
     }
 
+
     public String prepareEdit() {
-        asociacion = (Asociacion) getItems().getRowData();
+        asociacion = (Asociacion) getItemsAsociacion().getRowData();
         return "/admin/asociacion/asociacion/edit.xhtml";
     }
 

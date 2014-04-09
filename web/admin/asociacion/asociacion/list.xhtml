@@ -22,10 +22,10 @@
                     </p:toolbarGroup>                    
                 </p:toolbar>
                 <br />
-                
+
                 <p:dataTable id="AsociacionesTabla" var="asociacion"  value="#{asociacionBean.itemsAsociacion}"
                              rowKey="#{asociacion.id}"
-                             selection="#{asociacionBean.selectedAsociacion.nombre}" 
+                             selection="#{asociacionBean.selectedAsociacion}" 
                              selectionMode="single">                
 
                     <p:column headerText="Nombre">
@@ -37,15 +37,25 @@
                     <p:column headerText="Dirección">
                         <h:outputText value="#{asociacion.direccionId.direccion}"/>
                     </p:column>
-                          <p:column headerText="Telefono">
-                              <h:outputText value="#{asociacionBean.getTelefonos(asociacion.direccionId)}"/>
+                    <p:column headerText="Telefono">
+                        <h:outputText value="#{asociacionBean.getTelefonos(asociacion.direccionId)}"/>
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{asociacionBean.getEmails(asociacion.direccionId)}"/>
                     </p:column>
                     
+                      <p:column headerText="Dirección">
+                          <h:outputText value="#{asociacion.direccionId.paginaWeb}"/>
+                    </p:column>
+
+
                     <p:column headerText="Status">
-                        <h:outputText value="#{asociacion.status}"/>
+                        <h:outputText   value="#{asociacion.status}"/>
+
                     </p:column>
                     <p:column headerText="Acciones">
-                        <p:commandLink value="Editar"/>
+                        <p:commandLink action="#{asociacionBean.prepareEdit}" value="Editar"/>
+
                     </p:column>
                 </p:dataTable>
             </p:fieldset>
