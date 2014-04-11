@@ -26,7 +26,7 @@
                                          immediate="true"/>
                     </p:toolbarGroup>
                 </p:toolbar>
-                <br />
+<!--                <br />-->
                 <h:panelGrid columns="2">
                     <h:outputLabel value="* Nombre de la Asociacion:" for="nombre"/>
                     <p:inputText id="nombre" value="#{asociacionBean.selectedAsociacion.nombre}" 
@@ -63,38 +63,61 @@
 
                     <h:outputLabel value="* Teléfono:" for="telefono"/>
 
-                    <p:inputText id="telefono" value="#{asociacionBean.telefono}"
-                                 style="width: 250px"/>
+                    <p:inputMask id="telefono" 
+                                 value="#{asociacionBean.telefono.telefono}"
+                                 style="width: 250px"
+                                 mask="(9999) 999.9999"/>
 
                     <p:commandButton value="Agregar Telefono" >                             
-                        <f:ajax listener="#{asociacionBean.cargarTelefono}" execute="telefono" render="telefonos"/>
+                        <f:ajax listener="#{asociacionBean.cargarTelefonoEdit()}" 
+                                execute="telefono" render="telefonos"/>
                     </p:commandButton>
 
-                    <p:dataList id="telefonos" var="telefono" value="#{asociacionBean.selectedAsociacion.direccionId.telefonoCollection}">
-                        #{telefono.telefono}
+                    <p:dataList  id="telefonos" 
+                                 var="telefono" 
+                                 value="#{asociacionBean.selectedAsociacion.direccionId.telefonoCollection}" >
+                        <p:column headerText="Numero Telefonico">
+                            <p:inputMask  value="#{telefono.telefono}"
+                                          required="true"
+                                           mask="(9999) 999.9999"/>
+                        </p:column>
+        
                     </p:dataList>
 
 
                     <h:outputLabel value="* email:" for="email"/>
-                    <p:inputText id="email" value="#{asociacionBean.email}"
+                    <p:inputText id="email" 
+                                 value="#{asociacionBean.email.email}"
                                  validatorMessage="Email inválido"
                                  style="width: 250px">
                         <f:validateRegex
-                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"  />
                     </p:inputText>     
 
                     <p:commandButton value="Agregar Correo" >
-                        <f:ajax render="emails" execute="email" listener="#{asociacionBean.cargarEmail}"></f:ajax>
+                        <f:ajax render="emails" 
+                                execute="email" 
+                                listener="#{asociacionBean.cargarEmailEdit()}">
+                        </f:ajax>
                     </p:commandButton>
 
-                    <p:dataList value="#{asociacionBean.selectedAsociacion.direccionId.emailCollection}" id="emails" var="email">
-                        #{email.email}
+                    <p:dataList value="#{asociacionBean.selectedAsociacion.direccionId.emailCollection}" 
+                                id="emails" 
+                                var="email">
+                        <p:inputText value="#{email.email}" 
+                                     required="true"
+                                     validatorMessage="Email invalido"
+                                     style="width: 200px">
+                        <f:validateRegex
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"  />
+                
+                        </p:inputText>
                     </p:dataList>
 
                     <h:outputLabel value="Pagina Web:"/>
                     <p:inputText id="paginaweb"
                                  value="#{asociacionBean.selectedAsociacion.direccionId.paginaWeb}"
-                                 style="width: 250px"/>
+                                 style="width: 200px"/>
 
                     <h:outputLabel value="* status:" for="status"/>
                     <p:selectOneMenu id="status" value="#{asociacionBean.selectedAsociacion.status}"
@@ -106,6 +129,7 @@
                         <f:selectItem itemLabel="Inactivo" itemValue="0"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
+
                 <h:panelGroup id="messagePanel" layout="block" style="border-style: solid; border-color: red">
                     <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                 </h:panelGroup>

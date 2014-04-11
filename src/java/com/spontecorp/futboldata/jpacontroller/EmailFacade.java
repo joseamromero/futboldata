@@ -25,6 +25,13 @@ public class EmailFacade extends AbstractFacade<Email> implements Serializable {
         super(entityClass);
     }
 
+    public Email findEmail(String email) {
+        EntityManager em = getEntityManager();
+        Query q = em.createNamedQuery("Email.findByEmail", Email.class);
+        q.setParameter("email", email);
+        return (Email) q.getSingleResult();
+    }
+
     public List<Email> findListEmailxDireaccion(Direccion direccion) {
         List<Email> email = null;
         try {

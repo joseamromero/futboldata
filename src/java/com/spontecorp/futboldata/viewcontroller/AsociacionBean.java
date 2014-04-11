@@ -48,7 +48,7 @@ public class AsociacionBean implements Serializable {
 
     private List<Email> emails = null;
     private List<Telefono> telefonos = null;
-    private transient DataModel items = null;
+    private transient DataModel itemsTelefono = null;
     private transient DataModel itemsAsociacion = null;
     private SelectItem[] ciudades;
 
@@ -79,7 +79,24 @@ public class AsociacionBean implements Serializable {
                 Util.addErrorMessage("Asociacion no existente");
                 return prepareList();
             } else {
+                telefonos = (List<Telefono>) asociacion.getDireccionId().getTelefonoCollection();
+                for (Telefono telefonoEditar : telefonos) {
+                    controllerTelefono.edit(telefonoEditar);
+                }
 
+                emails = (List<Email>) asociacion.getDireccionId().getEmailCollection();
+                for (Email emailEditar : emails) {
+                    if (controllerEmail.findEmail(emailEditar.getEmail()) != null){
+                    controllerEmail.edit(emailEditar);
+                }
+                    else {
+                       
+                        emailEditar.setDireccionId(asociacion.getDireccionId());
+                        controllerEmail.create(emailEditar);
+                        
+                    }   
+                }
+                controllerDireccion.edit(asociacion.getDireccionId());
                 controllerAsociacion.edit(asociacion);
                 Util.addSuccessMessage("Asociacion editado con éxito");
 
@@ -98,7 +115,7 @@ public class AsociacionBean implements Serializable {
     public void ciudadAvailable() {
         ciudades = Util.getSelectItems(controllerCiudad.findCiudadxPais(pais));
     }
-   
+
     public void ciudadAvailable(Pais pais) {
         ciudades = Util.getSelectItems(controllerCiudad.findCiudadxPais(pais));
     }
@@ -146,15 +163,13 @@ public class AsociacionBean implements Serializable {
 
     }
 
-
-
     public String gotoAsociacionPage() {
         recreateModel();
         return "/admin/asociacion/asociacion/list.xhtml";
     }
 
     private void recreateModel() {
-        items = null;
+        itemsTelefono = null;
     }
 
     private void recreateModelAsociacion() {
@@ -202,9 +217,10 @@ public class AsociacionBean implements Serializable {
         }
         return asociacion;
     }
-    public void setSelectedAsociacion(Asociacion asociacion){
-       this.asociacion = asociacion;
-  
+
+    public void setSelectedAsociacion(Asociacion asociacion) {
+        this.asociacion = asociacion;
+
     }
 
     public String prepareList() {
@@ -232,14 +248,29 @@ public class AsociacionBean implements Serializable {
 
     }
 
-    public void cargarEmail() {    
+    public void cargarEmail() {
         emails.add(email);
         email = new Email();
 
     }
 
+    
+    public void cargarTelefonoEdit() {
+        asociacion.getDireccionId().getTelefonoCollection().add(telefono);
+        telefono = new Telefono();
+
+    }
+
+    public void cargarEmailEdit() {
+        asociacion.getDireccionId().getEmailCollection().add(email);
+        email = new Email();
+        telefono = new Telefono();
+
+    }
 
     public String prepareEdit() {
+          email = new Email();
+        telefono = new Telefono();
         asociacion = (Asociacion) getItemsAsociacion().getRowData();
         return "/admin/asociacion/asociacion/edit.xhtml";
     }
@@ -299,6 +330,18 @@ public class AsociacionBean implements Serializable {
 
     public void setEmails(List<Email> emails) {
         this.emails = emails;
+    }
+
+    public DataModel getItemsTelefono() {
+        return itemsTelefono;
+    }
+
+    public void setItemsTelefono(DataModel itemsTelefono) {
+        this.itemsTelefono = itemsTelefono;
+    }
+
+    public void cargarItemTelefono() {
+        telefono = (Telefono) getItemsTelefono().getRowData();
     }
 
 }

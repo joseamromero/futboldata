@@ -16,14 +16,18 @@
             <p:fieldset style="width: 85%" legend="Lista de Arbitros" >
                 <p:toolbar>
                     <p:toolbarGroup align="left">
-                        <p:commandButton value="Nuevo" action="#{asociacionBean.prepareCreate()}"/>
-                        <p:commandButton value="Administración" action="#{asociacionBean.returnAdminPage()}"
+                        <p:commandButton value="Nuevo" 
+                                         action="#{asociacionBean.prepareCreate()}"/>
+                        <p:commandButton value="Administración" 
+                                         action="#{asociacionBean.returnAdminPage()}"
                                          immediate="true"/>
                     </p:toolbarGroup>                    
                 </p:toolbar>
-                <br />
 
-                <p:dataTable id="AsociacionesTabla" var="asociacion"  value="#{asociacionBean.itemsAsociacion}"
+
+                <p:dataTable id="AsociacionesTabla" 
+                             var="asociacion"  
+                             value="#{asociacionBean.itemsAsociacion}"
                              rowKey="#{asociacion.id}"
                              selection="#{asociacionBean.selectedAsociacion}" 
                              selectionMode="single">                
@@ -43,14 +47,14 @@
                     <p:column headerText="Email">
                         <h:outputText value="#{asociacionBean.getEmails(asociacion.direccionId)}"/>
                     </p:column>
-                    
-                      <p:column headerText="Dirección">
-                          <h:outputText value="#{asociacion.direccionId.paginaWeb}"/>
+
+                    <p:column headerText="Dirección">
+                        <h:outputText value="#{asociacion.direccionId.paginaWeb}"/>
                     </p:column>
 
 
                     <p:column headerText="Status">
-                        <h:outputText   value="#{asociacion.status}"/>
+                        <h:outputText   value="#{asociacion.status== 0?'INACTIVO':'ACTIVO'}"/>
 
                     </p:column>
                     <p:column headerText="Acciones">
